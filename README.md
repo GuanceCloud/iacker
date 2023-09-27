@@ -1,18 +1,18 @@
 # Iacker
 
-**NOTE**: This project is working in progress. DON'T USE IT TO PRODUCTION.
+**NOTE**: This project is a work in progress. DON'T USE IT TO PRODUCTION.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/GuanceCloud/iacker)](https://goreportcard.com/report/github.com/GuanceCloud/iacker)
 [![GoDoc](https://godoc.org/github.com/GuanceCloud/iacker?status.svg)](https://godoc.org/github.com/GuanceCloud/iacker)
 [![License](https://img.shields.io/github/license/GuanceCloud/iacker.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-Iacker is a development framwork to help cloud native developer hugging with the infrastructure as code world.
+Iacker is a development framework to help cloud-native developers hugging with the infrastructure as a code's world.
 
-The goals is implement the open features for service provider.
+The goal is to implement the open features for service providers.
 
 * **Open API**: Expose [Cloud Control]() and [GraphQL]() API to the developer.
-* **Open Provider**: Auto-generate provider code for [Terraform](https://www.terraform.io), [Pulumi](https://www.pulumi.com), [CDK](https://developer.hashicorp.com/terraform/cdktf), [KubeVela](https://kubevela.io), [Crossplane](https://www.crossplane.io) and etc.
-* **Open Integration**: Create toolkit to import resource into the cloud provider created by *Iacker*.
+* **Open Provider**: Auto-generate provider code for [Terraform](https://www.terraform.io), [Pulumi](https://www.pulumi.com), [CDK](https://developer.hashicorp.com/terraform/cdktf), [KubeVela](https://kubevela.io), [Crossplane,](https://www.crossplane.io) etc.
+* **Open Integration**: Create libraries for [Cobra](https://github.com/spf13/cobra), [Apollo,](https://www.apollographql.com) and software development kits for various languages.
 
 ## Introduction
 
@@ -20,21 +20,21 @@ The goals is implement the open features for service provider.
 
 ### Features
 
-* **Model driven**: Define the resource schema by CUE and unified specification.
-* **Developer-first**: Easy to create a new provider.
-* **Generator-oriented**: Generate the code to various ecosystem.
+* **Model-driven**: Define the resource schema by [CUE](https://cuelang.org/) and unified specification.
+* **Developer-first**: All workflows in code, collaborate with others with [GitOps](https://www.weave.works/technologies/gitops/) workflow.
+* **Generator-oriented**: Build your own generator using the unified specification. Many popular IaC tools are provided.
 
-### Real world example
+### Real-world example
 
-> We had used it to create the [Terraform Provider for Guance Cloud](https://github.com/GuanceCloud/terraform-provider-guance) and other related service and tools.
+> We used it to create the [Terraform Provider for Guance Cloud](https://github.com/GuanceCloud/terraform-provider-guance) and other related services and tools.
 
 ![Logo](./artwork/banner-ins.jpeg)
 
 ## Roadmap
 
-All the features are described in the `proposals` folder. It inspires by the [GRFC-Template](https://github.com/grpc/proposal/blob/master/GRFC-TEMPLATE.md) used in Google. You can find the implementation status in the table below.
+All the features are described in the `proposals` folder. It is inspired by the [GRFC Template](https://github.com/grpc/proposal/blob/master/GRFC-TEMPLATE.md) used in Google. You can find the implementation status in the table below.
 
-The proposal workflow described in [Guance Cloud Proposal Governance Guidelines](https://github.com/GuanceCloud/community/tree/main/proposals).
+The proposal workflow is described in the [Guance Cloud Proposal Governance Guidelines](https://github.com/GuanceCloud/community/tree/main/proposals).
 
 ### Architecture
 

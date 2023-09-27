@@ -66,14 +66,3 @@ Swagger is faced with RESTFul API, which is unsuitable for other protocols, such
 ### Smithy and Darabonba
 
 Smithy and Darabonba are DSL for API resources. But the code generator scene uses a general-purpose programming language to generate code from the DSL file's Abstract Syntax Tree (AST). It means the user must learn two languages, which requires much work.
-
-## Implementation
-
-### Repository Splitting
-
-We split the repository into three parts:
-
-1. **Iacker**, An open-source tool to compile the specification of API servers with various protocols, developer tools, and documentation.
-2. **Generator**, The configuration repository to store the API resources specification of Guance Cloud.
-
-For the details implementation plan, please refer to the proposal after this proposal.
