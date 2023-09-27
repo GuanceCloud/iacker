@@ -1,0 +1,79 @@
+
+Reconciler: Reconcile Resource
+
+Reconciler: {
+    Sequence: {
+        shape: sequence_diagram
+
+        Resource Graph
+        Sinker
+        Reconciler
+        Resource Driver
+        Cloud Resource
+
+        Resource Graph -> Sinker: Watch changes
+        Sinker -> Reconciler: Call
+        Reconciler -> Resource Driver: Validate desired state
+        Resource Driver -> Reconciler: Validate diagnostics
+        Reconciler -> Resource Driver: Read actual state
+        Resource Driver <-> Cloud Resource: API / RPC Call
+        Resource Driver -> Reconciler: Actual state
+        Reconciler -> Reconciler: Diff actual and desired state
+        Reconciler -> Resource Driver: Create / Update / Delete
+        Resource Driver <-> Cloud Resource: API / RPC Call
+        Resource Driver -> Reconciler: Diagnostics
+        Reconciler -> Resource Driver: Read actual state
+        Resource Driver <-> Cloud Resource: API / RPC Call
+        Resource Driver -> Reconciler: Actual state
+        Reconciler -> Reconciler: Confirm actual state
+        Reconciler -> Resource Graph: Transmit state
+    }
+
+    State Transmit: {
+        Resource Graph -> Reconciler: Watch changes
+        Reconciler -> Resource Graph: Transmit state
+    }
+}
+
+Reconciler -> DAL
+
+DAL: DAL
+DAL: {
+    Resource Graph: {
+        ResourceX: {
+            shape: sql_table
+
+            id: int {constraint: primary_key}
+            attributes: json
+            y: id of ResourceY
+            created_at: timestamp with time zone
+            updated_at: timestamp with time zone
+        }
+
+        Request: {
+            shape: sql_table
+
+            id: int {constraint: primary_key}
+            desired_state: json
+            state: string
+            created_at: timestamp with time zone
+            updated_at: timestamp with time zone
+        }
+    }
+
+    Resource Driver: {
+        Implementation: {
+            shape: class
+
+            Schema: cue.Value
+            Timeout: map
+
+            + Validate(Request): Response
+            + Create(Request): Response
+            + Delete(Request): Response
+            + Update(Request): Response
+            + List(Request): Response
+            + Read(Request): Response
+        }
+    }
+}

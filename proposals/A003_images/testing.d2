@@ -1,0 +1,23 @@
+RMS Package: {
+    PetStore
+}
+
+Template Package: {
+    Ent
+
+    Proto
+
+    Terraform
+}
+
+RMS Package -> Engine
+Template Package -> Engine
+Engine -> Snapshot: diff
+
+Snapshot: {
+    Ent + PetStore
+
+    Proto + PetStore
+
+    Terraform + PetStore
+}

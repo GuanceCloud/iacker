@@ -1,0 +1,75 @@
+# Iacker
+
+**NOTE**: This project is working in progress. DON'T USE IT TO PRODUCTION.
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/GuanceCloud/iacker)](https://goreportcard.com/report/github.com/GuanceCloud/iacker)
+[![GoDoc](https://godoc.org/github.com/GuanceCloud/iacker?status.svg)](https://godoc.org/github.com/GuanceCloud/iacker)
+[![License](https://img.shields.io/github/license/GuanceCloud/iacker.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
+Iacker is a development framwork to help cloud native developer hugging with the infrastructure as code world.
+
+The goals is implement the open features for service provider.
+
+* **Open API**: Expose [Cloud Control]() and [GraphQL]() API to the developer.
+* **Open Provider**: Auto-generate provider code for [Terraform](https://www.terraform.io), [Pulumi](https://www.pulumi.com), [CDK](https://developer.hashicorp.com/terraform/cdktf), [KubeVela](https://kubevela.io), [Crossplane](https://www.crossplane.io) and etc.
+* **Open Integration**: Create toolkit to import resource into the cloud provider created by *Iacker*.
+
+## Introduction
+
+<!-- ![Graph](./artwork/arch.svg) -->
+
+### Features
+
+* **Model driven**: Define the resource schema by CUE and unified specification.
+* **Developer-first**: Easy to create a new provider.
+* **Generator-oriented**: Generate the code to various ecosystem.
+
+### Real world example
+
+> We had used it to create the [Terraform Provider for Guance Cloud](https://github.com/GuanceCloud/terraform-provider-guance) and other related service and tools.
+
+![Logo](./artwork/banner-ins.jpeg)
+
+## Roadmap
+
+All the features are described in the `proposals` folder. It inspires by the [GRFC-Template](https://github.com/grpc/proposal/blob/master/GRFC-TEMPLATE.md) used in Google. You can find the implementation status in the table below.
+
+The proposal workflow described in [Guance Cloud Proposal Governance Guidelines](https://github.com/GuanceCloud/community/tree/main/proposals).
+
+### Architecture
+
+Architecture defines the basic concepts and principles of *Iacker* architecture.
+
+| #    | Title                         | How-tos |
+| ---- | ----------------------------- | -------------- |
+| A001 | [API as Code in *Iacker*](./proposals/A001-api-as-code-overview.md)   | How *Iacker* governance our API |
+| A002 | [Resource Management Specification](./proposals/A002-resource-management-specification.md) | How to define a new cloud resource |
+| A003 | [Generator Framework](./proposals/A003-generator-framework.md) | How to build developer tools by *Iacker* |
+| A004 | Resource Management Server | How to develop once, run as multiple protocols |
+
+### Protocols
+
+At *Iacker*, we use a unified resource management framework to expose various protocols for different use cases.
+
+Protocols describe the protocols used in *Iacker*. Please follow the protocol specification (coming soon) to add a new protocol.
+
+| #    | Title                         | How-tos |
+| ---- | ----------------------------- | -------------- |
+| P001 | Cloud Control API | Cloud Control API and the implementations |
+
+### Developer Tools
+
+Developer tools are the core of developer experience infrastructure (DXI). It provides tools to help developers build, test, and deploy their Guance Cloud OpenAPI callings.
+
+| #    | Title                         | How-tos |
+| ---- | ----------------------------- | -------------- |
+| T001 | [Resource Explorer](./proposals/T001-resource-explorer.md) | How to discover and interact with cloud resource |
+| T002 | Terraform Provider | How to build the engineering capability for X as Code world |
+
+## Developer Guide
+
+See the [hack](./hack) folder to understand how to build this project.
+
+## Contributing
+
+We welcome contributions to the Guance Cloud OpenAPI specification. Please see the [Contributing Guidelines](https://guance.io/contribution-guide/) for more information.

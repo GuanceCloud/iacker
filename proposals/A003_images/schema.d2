@@ -1,0 +1,56 @@
+direction: right
+
+Template: {
+    shape: class
+
+    inputs: Inputs
+    outputs: Outputs
+    diagnostics: list<Diagnostic>
+}
+
+Template.inputs -> Inputs
+Template.outputs -> Outputs
+Template.diagnostics -> Diagnostic
+
+Inputs: {
+    shape: class
+
+    resources: map<string, Resource>
+    options: Options
+}
+
+Resource: {
+    shape: class
+}
+
+Inputs.resources -> Resource
+
+Inputs.options -> Options
+
+Outputs: {
+    shape: class
+
+    files: map<string, File>
+}
+
+Outputs.files -> File
+
+Diagnostic: {
+    shape: class
+
+    message: string
+    severity: int
+}
+
+File: {
+    shape: class
+
+    content: string
+}
+
+Options: {
+    shape: class
+
+    outdir: string
+    vars: map<string, string>
+}

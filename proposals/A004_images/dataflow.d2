@@ -1,0 +1,205 @@
+Server: "Protocol Server"
+
+Server: {
+    Cloud Control: {
+        shape: class
+
+        + CreateResource(Request): Response
+        + DeleteResource(Request): Response
+        + UpdateResource(Request): Response
+        + ListResource(Request): Response
+        + GetResource(Request): Response
+        + CancelResourceRequest(Request): Response
+        + GetResourceRequestStatus(Request): Response
+        + ListResourceRequests(Request): Response
+    }
+
+    RESTFul: {
+        shape: class
+
+        + GetXXX(Request): Response
+        + PostXXX(Request): Response
+        + DeleteXXX(Request): Response
+        + PutXXX(Request): Response
+        + PatchXXX(Request): Response
+    }
+
+    GraphQL: {
+        shape: class
+
+        + QueryXXX(Request): Response
+        + MutationXXX(Request): Response
+    }
+}
+
+Server.Cloud Control -> Service.Cloud Control: "Proto Types"
+Server.RESTFul -> Service.RESTFul: "Proto Types"
+Server.GraphQL -> Service.GraphQL: "GraphQL Types"
+
+Service: {
+    Cloud Control: {
+        Validate Proto Types -> Decode Proto Types To Go Types --> Dispatch Operation
+    }
+
+    RESTFul: {
+        Validate Proto Types -> Decode Proto Types To Go Types --> Dispatch Operation
+    }
+
+    GraphQL: {
+        Decode GraphQL Types To Go Types -> Validate Go Types --> Dispatch Operation
+    }
+}
+
+Service.Cloud Control -> Biz: "CUE Generated Go Types"
+Service.RESTFul -> Biz: "CUE Generated Go Types"
+Service.GraphQL -> Biz: "CUE Generated Go Types"
+
+Biz: Biz for Cloud Control
+
+Biz: {
+    Operations: Resource Management
+    Operations: {
+        Create: {
+            # nodes
+            Step1: Step1: Get Resource
+            
+            Check1: Resource is Exists
+            Check1: {
+                shape: diamond
+            }
+            
+            Step2: Step2: Create Resource Node in Graph
+            Step2: {
+                Generate resource ID \
+                    -> Extract all resource refs \
+                    -> Save node in graph
+            }
+
+            Step3: Step3: Create Reconcile Request
+            
+            Term1: Raise RESOURCE_EXISTS
+
+            # flow
+            Step1 -> Check1
+            Check1 -> Step2: No
+            Check1 -> Term1: Yes
+            Step2 -> Step3
+            Step3 -> End
+            Term1 -> End
+        }
+
+        Delete: {
+            # nodes
+            Step1: Step1: Get Resource
+            
+            Check1: Resource is Exists
+            Check1: {
+                shape: diamond
+            }
+
+            Check2: Resource is in use
+            Check2: {
+                shape: diamond
+            }
+            
+            Step2: Step2: Delete Resource Node in Graph
+
+            Step3: Step3: Create Reconcile Request
+            
+            Error1: Raise RESOURCE_NOT_EXISTS
+            Error2: Raise RESOURCE_IN_USE
+
+            # flow
+            Step1 -> Check1
+            Check1 -> Check2: Yes
+            Check1 -> Error1: No
+            Check2 -> Error2: Yes
+            Check2 -> Step2: No
+            Step2 -> Step3
+            Step3 -> End
+            Error1 -> End
+            Error2 -> End
+        }
+
+        Update: {
+            # nodes
+            Step1: Step1: Get Resource
+            
+            Check1: Resource is Exists
+            Check1: {
+                shape: diamond
+            }
+            
+            Step2: Step2: Update Resource Node in Graph
+
+            Step3: Step3: Create Reconcile Request
+            
+            Error1: Raise RESOURCE_NOT_EXISTS
+
+            # flow
+            Step1 -> Check1
+            Check1 -> Step2: Yes
+            Check1 -> Error1: No
+            Step2 -> Step3
+            Step3 -> End
+            Error1 -> End
+        }
+
+        Query: {
+            List: {
+                Step1: Step1: List Resource
+     
+                Step1 -> End
+             }
+     
+             Get: {
+                 Step1: Step1: Get Resource
+     
+                 Step1 -> End
+             }
+        }
+    }
+
+    Request: Request Management
+
+    Request: {
+        CancelRequest: {
+            # nodes
+            Step1: Step1: Get Request
+
+            Check1: request is Exists
+            Check1: {
+                shape: diamond
+            }
+
+            Check1 -> Error1: No
+            Check1 -> Step2: Yes
+            
+            Step2: Step2: Update the status of the request to CANCEL_IN_PROGRESS
+
+            Step3: Step3: Create Rollback Request
+            
+            Error1: Raise REQUEST_NOT_EXISTS
+
+            # flow
+            Step1 -> Check1
+            Step2 -> Step3
+            Step3 -> End
+            Error1 -> End
+        }
+
+        Query: {
+            GetRequestStatus: {
+                Step1: Step1: Get Request Status
+             
+                Step1 -> End
+            }
+
+            ListRequests: {
+                Step1: Step1: List Requests
+         
+                Step1 -> End
+            }
+        }
+    }
+}

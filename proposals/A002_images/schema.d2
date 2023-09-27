@@ -1,0 +1,95 @@
+direction: right
+
+Resource: {
+    shape: class
+
+    plural: string
+    title: I18n
+    description: I18n
+    models: map<string, Model>
+    meta: Meta
+}
+
+Resource.models -> Model
+Resource.meta -> Meta
+Resource.title -> I18n
+
+Meta: {
+    shape: class
+
+    datasource: boolean
+}
+
+Model: {
+    shape: class
+
+    title: I18n
+    description: I18n
+    properties: list<Property>
+}
+
+Model.properties -> Property
+Model.title -> I18n
+
+Property: {
+    shape: class
+
+    name: string
+    title: I18n
+    description: I18n
+    schema: PropSchema
+    meta: PropMeta
+}
+
+Property.schema -> PropSchema
+Property.meta -> PropMeta
+Property.title -> I18n
+
+I18n: {
+    shape: class
+
+    zh: string
+    en: string
+}
+
+PropSchema: {
+    shape: class
+
+    type: string
+    format: string
+    required: boolean
+    elem: ElemSchema
+    enum: list<Enum>
+    model: string
+    ref: string
+}
+
+PropSchema.elem -> ElemSchema
+PropSchema.enum -> Enum
+
+ElemSchema: {
+    shape: class
+
+    type: string
+    format: string
+    model: string
+    ref: string
+    enum: list<Enum>
+}
+
+ElemSchema.enum -> Enum
+
+PropMeta: {
+    shape: class
+
+    dynamic: boolean
+    immutable: boolean
+}
+
+Enum: {
+    shape: class
+
+    name: string
+    value: string
+    title: I18n
+}

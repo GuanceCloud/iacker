@@ -1,0 +1,15 @@
+direction: right
+
+RMS->Ent: codegen
+RMS->Protobuf: codegen
+Ent->CCAPI: serve
+Ent->GraphQL: serve
+Protobuf->Swagger: codegen
+Swagger->RESTFul: serve
+
+CCAPI->Terraform: codegen
+Terraform->Crossplane: codegen
+
+RESTFul->SDK: codegen
+GraphQL->Apollo: use
+Apollo->Web: use

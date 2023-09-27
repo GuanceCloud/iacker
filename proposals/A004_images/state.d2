@@ -1,0 +1,51 @@
+direction: right
+
+PENDING -> IN_PROGRESS
+
+PENDING -> CANCEL_IN_PROGRESS
+
+IN_PROGRESS -> CANCEL_IN_PROGRESS 
+
+IN_PROGRESS -> SUCCESS
+
+IN_PROGRESS -> FAILED
+
+CANCEL_IN_PROGRESS -> FAILED
+
+CANCEL_IN_PROGRESS -> CANCEL_COMPLETE
+
+PENDING: {
+    shape: circle
+}
+
+SUCCESS: {
+    shape: circle
+    style: {
+        font-color: green
+        double-border: true 
+    }
+}
+
+FAILED: {
+    shape: circle
+    style: {
+        font-color: red
+        double-border: true 
+    }
+}
+
+IN_PROGRESS: {
+    shape: circle  
+}
+
+CANCEL_IN_PROGRESS: {
+    shape: circle 
+}
+
+CANCEL_COMPLETE: {
+    shape: circle
+    style: {
+        font-color: blue
+        double-border: true 
+    }
+}
