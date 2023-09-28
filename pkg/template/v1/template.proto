@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package pkg.template.v1;
+
+import "pkg/resource/v1/resource.proto";
+
+option go_package = "github.com/GuanceCloud/iacker/pkg/template/v1;v1";
+
+// Manifest is a template definitions that generates files from templates.
+message Manifest {
+  Inputs inputs = 1;
+  Outputs outputs = 2;
+  repeated Diagnostic diagnostics = 3;
+}
+
+// Inputs is a set of inputs for a template.
+message Inputs {
+  optional Options options = 1;
+  map<string, pkg.resource.v1.Resource> resources = 2;
+  map<string, pkg.resource.v1.Error> errors = 3;
+}
+
+// Outputs is a set of outputs for a template.
+message Outputs {
+  map<string, File> files = 1;
+}
+
+// Options is a set of options for a template.
+message Options {
+  string outdir = 1;
+  map<string, string> vars = 2;
+  repeated Provisioner provisioners = 3;
+}
+
+// Diagnostic is a diagnostic message.
+message Diagnostic {
+  string message = 1;
+  int32 severity = 2;
+}
+
+// Output is a template output.
+message File {
+  string content = 1;
+}
+
+// Provisioner is a provisioner.
+message Provisioner {
+  string type = 1;
+  optional ShellProvisioner shell = 2;
+}
+
+// ShellProvisioner is a shell provisioner.
+message ShellProvisioner {
+  string inline = 1;
+}

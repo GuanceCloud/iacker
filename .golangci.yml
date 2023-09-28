@@ -1,0 +1,43 @@
+run:
+  timeout: 10m
+
+linters:
+  disable-all: true
+  enable:
+    - ineffassign
+    - typecheck
+    - varcheck
+    - unused
+    - structcheck
+    - deadcode
+    - gosimple
+    - goimports
+    - errcheck
+    - staticcheck
+    - gosec
+    - asciicheck
+    - bodyclose
+    - exportloopref
+    - rowserrcheck
+    - makezero
+    - durationcheck
+    - prealloc
+    - predeclared
+
+linters-settings:
+  gosec:
+    severity: "low"
+    confidence: "low"
+  staticcheck:
+    checks:
+      - all
+      - '-SA1029'
+      - '-SA5001'
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck
+        - gosec
+        - rowserrcheck
+        - makezero

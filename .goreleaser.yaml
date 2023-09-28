@@ -1,0 +1,165 @@
+# The project name is used in the name of the Brew formula, archives, etc. 
+# If none is given, it will be inferred from the name of the GitHub, GitLab, or Gitea release.
+project_name: openapi
+before:
+  hooks:
+    - go mod tidy
+
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=0
+
+builds:
+  # You can have multiple builds defined as a yaml list
+  # - main: ./cmd/cli
+  #   id: "cli"
+  #   binary: cli
+  # - main: ./cmd/worker
+  #   id: "worker"
+  #   binary: worker
+
+  # Path to main.go file or main package.
+  # Notice: when used with `gomod.proxy`, this must be a package.
+  # Default is `.`.
+  - main: ./cmd/rmserver
+
+    # Binary name.
+    # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
+    # Default is the name of the project directory.
+    binary: rmserver
+  
+    # GOOS list to build for.
+    # For more info refer to: https://golang.org/doc/install/source#environment
+    # Defaults are darwin and linux.
+    goos:
+      - linux
+      - windows
+      - darwin
+
+    # GOARCH to build for.
+    # For more info refer to: https://golang.org/doc/install/source#environment
+    # Defaults are 386, amd64 and arm64.
+    goarch:
+      - amd64
+      - arm64
+
+    # # GOARM to build for when GOARCH is arm.
+    # # For more info refer to: https://golang.org/doc/install/source#environment
+    # # Default is only 6.
+    # goarm:
+    #   - 6
+    #   - 7
+
+    # # GOAMD64 to build when GOARCH is amd64.
+    # # For more info refer to: https://golang.org/doc/install/source#environment
+    # # Default is only v1.
+    # goamd64:
+    #   - v2
+    #   - v3
+
+dockers:
+  - image_templates:
+    - "guancecloud/rmserver:{{ .Version }}-amd64"
+    goos: linux
+    goarch: amd64
+    dockerfile: Dockerfile
+    use: docker
+    build_flag_templates:
+    - --platform=linux/amd64
+    - --label=org.opencontainers.image.title={{ .ProjectName }}
+    - --label=org.opencontainers.image.description={{ .ProjectName }}
+    - --label=org.opencontainers.image.url=https://openrms.guance.io
+    - --label=org.opencontainers.image.source=https://github.com/GuanceCloud/iacker
+    - --label=org.opencontainers.image.version={{ .Version }}
+    - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+    - --label=org.opencontainers.image.revision={{ .FullCommit }}
+    - --label=org.opencontainers.image.licenses=MIT
+
+  - image_templates:
+    - "guancecloud/rmserver:{{ .Version }}-arm64"
+    goos: linux
+    goarch: arm64
+    dockerfile: Dockerfile
+    use: docker
+    build_flag_templates:
+    - --platform=linux/arm64
+    - --label=org.opencontainers.image.title={{ .ProjectName }}
+    - --label=org.opencontainers.image.description={{ .ProjectName }}
+    - --label=org.opencontainers.image.url=https://openrms.guance.io
+    - --label=org.opencontainers.image.source=https://github.com/GuanceCloud/iacker
+    - --label=org.opencontainers.image.version={{ .Version }}
+    - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+    - --label=org.opencontainers.image.revision={{ .FullCommit }}
+    - --label=org.opencontainers.image.licenses=MIT
+
+docker_manifests:
+  # You can have multiple Docker manifests.
+  - name_template: guancecloud/rmserver:{{ .Version }}
+    image_templates:
+      - guancecloud/rmserver:{{ .Version }}-amd64
+      - guancecloud/rmserver:{{ .Version }}-arm64
+  - name_template: guancecloud/rmserver:latest
+    image_templates:
+      - guancecloud/rmserver:{{ .Version }}-amd64
+      - guancecloud/rmserver:{{ .Version }}-arm64
+
+# your github_token in this file
+# or
+# setup ENV GitHub token: $ export GITHUB_TOKEN="YOUR_GH_TOKEN"
+# github_token: ~/go/src/github.com/github_token
+env_files: {}
+
+changelog:
+  # Set this to true if you don't want any changelog at all.
+  # Warning: this will also ignore any changelog files passed via `--release-notes`,
+  # and will render an empty changelog.
+  # This may result in an empty release notes on GitHub/GitLab/Gitea.
+  skip: false 
+
+  # Changelog generation implementation to use.
+  #
+  # Valid options are:
+  # - `git`: uses `git log`;
+  # - `github`: uses the compare GitHub API, appending the author login to the changelog.
+  # - `gitlab`: uses the compare GitLab API, appending the author name and email to the changelog.
+  # - `github-native`: uses the GitHub release notes generation API, disables the groups feature.
+  #
+  # Defaults to `git`.
+  use: github-native
+
+  # Sorts the changelog by the commit's messages.
+  # Could either be asc, desc or empty
+  # Default is empty
+  sort: asc
+
+  # Max commit hash length to use in the changelog.
+  #
+  # 0: use whatever the changelog implementation gives you
+  # -1: remove the commit hash from the changelog
+  # any other number: max length.
+  #
+  # Default: 0.
+  abbrev: 0
+
+  # Group commits messages by given regex and title.
+  # Order value defines the order of the groups.
+  # Proving no regex means all commits will be grouped under the default group.
+  # Groups are disabled when using github-native, as it already groups things by itself.
+  #
+  # Default is no groups.
+  filters:
+    # Commit messages matching the regexp listed here will be removed from
+    # the changelog
+    # Default is empty
+    exclude:
+      - '^docs:'
+      - typo
+
+snapshot:
+  # Allows you to change the name of the generated snapshot
+  #
+  # Note that some pipes require this to be semantic version compliant (nfpm,
+  # for example).
+  #
+  # Default is `{{ .Version }}-SNAPSHOT-{{.ShortCommit}}`.
+  name_template: '{{ incpatch .Version }}-devel'
