@@ -1,6 +1,6 @@
 # The project name is used in the name of the Brew formula, archives, etc. 
 # If none is given, it will be inferred from the name of the GitHub, GitLab, or Gitea release.
-project_name: openapi
+project_name: iacker
 before:
   hooks:
     - go mod tidy
@@ -21,12 +21,12 @@ builds:
   # Path to main.go file or main package.
   # Notice: when used with `gomod.proxy`, this must be a package.
   # Default is `.`.
-  - main: ./cmd/rmserver
+  - main: ./cmd/iacker
 
     # Binary name.
     # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
     # Default is the name of the project directory.
-    binary: rmserver
+    binary: iacker
   
     # GOOS list to build for.
     # For more info refer to: https://golang.org/doc/install/source#environment
@@ -58,50 +58,43 @@ builds:
     #   - v3
 
 dockers:
-  - image_templates:
-    - "guancecloud/rmserver:{{ .Version }}-amd64"
-    goos: linux
-    goarch: amd64
-    dockerfile: Dockerfile
-    use: docker
-    build_flag_templates:
-    - --platform=linux/amd64
-    - --label=org.opencontainers.image.title={{ .ProjectName }}
-    - --label=org.opencontainers.image.description={{ .ProjectName }}
-    - --label=org.opencontainers.image.url=https://openrms.guance.io
-    - --label=org.opencontainers.image.source=https://github.com/GuanceCloud/iacker
-    - --label=org.opencontainers.image.version={{ .Version }}
-    - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
-    - --label=org.opencontainers.image.revision={{ .FullCommit }}
-    - --label=org.opencontainers.image.licenses=MIT
-
-  - image_templates:
-    - "guancecloud/rmserver:{{ .Version }}-arm64"
-    goos: linux
-    goarch: arm64
-    dockerfile: Dockerfile
-    use: docker
-    build_flag_templates:
-    - --platform=linux/arm64
-    - --label=org.opencontainers.image.title={{ .ProjectName }}
-    - --label=org.opencontainers.image.description={{ .ProjectName }}
-    - --label=org.opencontainers.image.url=https://openrms.guance.io
-    - --label=org.opencontainers.image.source=https://github.com/GuanceCloud/iacker
-    - --label=org.opencontainers.image.version={{ .Version }}
-    - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
-    - --label=org.opencontainers.image.revision={{ .FullCommit }}
-    - --label=org.opencontainers.image.licenses=MIT
+- image_templates: ["ghcr.io/GuanceCloud/{{ .ProjectName }}:{{ .Version }}-amd64"]
+  dockerfile: Dockerfile
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/amd64
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.description={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/GuanceCloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/GuanceCloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+  - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.licenses=MIT
+- image_templates: ["ghcr.io/GuanceCloud/{{ .ProjectName }}:{{ .Version }}-arm64v8"]
+  goarch: arm64
+  dockerfile: Dockerfile
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/arm64/v8
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.description={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/GuanceCloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/GuanceCloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+  - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.licenses=MIT
 
 docker_manifests:
-  # You can have multiple Docker manifests.
-  - name_template: guancecloud/rmserver:{{ .Version }}
-    image_templates:
-      - guancecloud/rmserver:{{ .Version }}-amd64
-      - guancecloud/rmserver:{{ .Version }}-arm64
-  - name_template: guancecloud/rmserver:latest
-    image_templates:
-      - guancecloud/rmserver:{{ .Version }}-amd64
-      - guancecloud/rmserver:{{ .Version }}-arm64
+- name_template: ghcr.io/GuanceCloud/{{ .ProjectName }}:{{ .Version }}
+  image_templates:
+  - ghcr.io/GuanceCloud/{{ .ProjectName }}:{{ .Version }}-amd64
+  - ghcr.io/GuanceCloud/{{ .ProjectName }}:{{ .Version }}-arm64v8
+- name_template: ghcr.io/GuanceCloud/{{ .ProjectName }}:latest
+  image_templates:
+  - ghcr.io/GuanceCloud/{{ .ProjectName }}:{{ .Version }}-amd64
+  - ghcr.io/GuanceCloud/{{ .ProjectName }}:{{ .Version }}-arm64v8
 
 # your github_token in this file
 # or

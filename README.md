@@ -10,7 +10,7 @@ Iacker is a development framework to help cloud-native developers hugging with t
 
 The goal is to implement the open features for service providers.
 
-* **Open API**: Expose [Cloud Control]() and [GraphQL]() API to the developer.
+* **Open API**: Expose [Cloud Control](https://aws.amazon.com/cloudcontrolapi/) and [GraphQL](https://graphql.org/) API to the developer.
 * **Open Provider**: Auto-generate provider code for [Terraform](https://www.terraform.io), [Pulumi](https://www.pulumi.com), [CDK](https://developer.hashicorp.com/terraform/cdktf), [KubeVela](https://kubevela.io), [Crossplane,](https://www.crossplane.io) etc.
 * **Open Integration**: Create libraries for [Cobra](https://github.com/spf13/cobra), [Apollo,](https://www.apollographql.com) and software development kits for various languages.
 
@@ -59,7 +59,7 @@ Protocols describe the protocols used in *Iacker*. Please follow the protocol sp
 
 ### Developer Tools
 
-Developer tools are the core of developer experience infrastructure (DXI). It provides tools to help developers build, test, and deploy their Guance Cloud OpenAPI callings.
+Developer tools are the core of developer experience infrastructure (DXI). It provides tools to help developers build, test, and deploy their API callings.
 
 | #    | Title                         | How-tos |
 | ---- | ----------------------------- | -------------- |
@@ -72,4 +72,4 @@ See the [hack](./hack) folder to understand how to build this project.
 
 ## Contributing
 
-We welcome contributions to the Guance Cloud OpenAPI specification. Please see the [Contributing Guidelines](https://guance.io/contribution-guide/) for more information.
+We welcome contributions to *Iacker*. Please see the [Contributing Guidelines](https://guance.io/contribution-guide/) for more information.
