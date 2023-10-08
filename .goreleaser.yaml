@@ -57,45 +57,6 @@ builds:
     #   - v2
     #   - v3
 
-dockers:
-- image_templates: ["ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-amd64"]
-  dockerfile: Dockerfile
-  use: buildx
-  build_flag_templates:
-  - --platform=linux/amd64
-  - --label=org.opencontainers.image.title={{ .ProjectName }}
-  - --label=org.opencontainers.image.description={{ .ProjectName }}
-  - --label=org.opencontainers.image.url=https://github.com/guancecloud/{{ .ProjectName }}
-  - --label=org.opencontainers.image.source=https://github.com/guancecloud/{{ .ProjectName }}
-  - --label=org.opencontainers.image.version={{ .Version }}
-  - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
-  - --label=org.opencontainers.image.revision={{ .FullCommit }}
-  - --label=org.opencontainers.image.licenses=MIT
-- image_templates: ["ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-arm64v8"]
-  goarch: arm64
-  dockerfile: Dockerfile
-  use: buildx
-  build_flag_templates:
-  - --platform=linux/arm64/v8
-  - --label=org.opencontainers.image.title={{ .ProjectName }}
-  - --label=org.opencontainers.image.description={{ .ProjectName }}
-  - --label=org.opencontainers.image.url=https://github.com/guancecloud/{{ .ProjectName }}
-  - --label=org.opencontainers.image.source=https://github.com/guancecloud/{{ .ProjectName }}
-  - --label=org.opencontainers.image.version={{ .Version }}
-  - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
-  - --label=org.opencontainers.image.revision={{ .FullCommit }}
-  - --label=org.opencontainers.image.licenses=MIT
-
-docker_manifests:
-- name_template: ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}
-  image_templates:
-  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-amd64
-  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-arm64v8
-- name_template: ghcr.io/guancecloud/{{ .ProjectName }}:latest
-  image_templates:
-  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-amd64
-  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-arm64v8
-
 # your github_token in this file
 # or
 # setup ENV GitHub token: $ export GITHUB_TOKEN="YOUR_GH_TOKEN"
@@ -156,3 +117,144 @@ snapshot:
   #
   # Default is `{{ .Version }}-SNAPSHOT-{{.ShortCommit}}`.
   name_template: '{{ incpatch .Version }}-devel'
+
+
+dockers:
+- image_templates: ["ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-amd64"]
+  dockerfile: Dockerfile
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/amd64
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.description={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/guancecloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/guancecloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+  - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.licenses=MIT
+- image_templates: ["ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-arm64v8"]
+  goarch: arm64
+  dockerfile: Dockerfile
+  use: buildx
+  build_flag_templates:
+  - --platform=linux/arm64/v8
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.description={{ .ProjectName }}
+  - --label=org.opencontainers.image.url=https://github.com/guancecloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.source=https://github.com/guancecloud/{{ .ProjectName }}
+  - --label=org.opencontainers.image.version={{ .Version }}
+  - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.licenses=MIT
+
+docker_manifests:
+- name_template: ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}
+  image_templates:
+  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-amd64
+  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-arm64v8
+- name_template: ghcr.io/guancecloud/{{ .ProjectName }}:latest
+  image_templates:
+  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-amd64
+  - ghcr.io/guancecloud/{{ .ProjectName }}:{{ .Version }}-arm64v8
+
+# GoReleaser can be wired to nfpm to generate and publish .deb, .rpm and .apk packages.  
+nfpms:
+- id: guance
+  maintainer: Guance Cloud <developer@guance.com>
+  vendor: Guance Cloud Inc.
+  description: Command-Line Toolkit for Guance Cloud
+  homepage: https://guance.io
+  license: MIT
+  formats:
+  - deb
+  - rpm
+  - apk
+  - archlinux
+  file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+publishers:
+  - name: fury.io
+    # by specifying `packages` id here goreleaser will only use this publisher
+    # with artifacts identified by this id
+    ids:
+      - guance
+    dir: "{{ dir .ArtifactPath }}"
+    cmd: curl -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/guancecloud/
+
+brews:
+  -
+    # Name template of the recipe
+    # Default to project name
+    # name: "{{ .ProjectName }}"
+
+    # NOTE: make sure the url_template, the token and given repo (github or
+    # gitlab) owner and name are from the same kind.
+    # We will probably unify this in the next major version like it is
+    # done with scoop.
+
+    # GitHub/GitLab repository to push the formula to
+    tap:
+      # Repository owner template. (templateable)
+      owner: GuanceCloud
+
+      # Repository name. (templateable)
+      name: homebrew-tap
+
+      # Optionally a branch can be provided. (templateable)
+      #
+      # Defaults to the default repository branch.
+      branch: main
+
+      # Optionally a token can be provided, if it differs from the token
+      # provided to GoReleaser
+      token: "{{ .Env.GITHUB_TOKEN }}"
+
+    # Template for the url which is determined by the given Token (github,
+    # gitlab or gitea)
+    #
+    # Default depends on the client.
+    url_template: "https://github.com/GuanceCloud/{{ .ProjectName }}/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+
+    # Allows you to set a custom download strategy. Note that you'll need
+    # to implement the strategy and add it to your tap repository.
+    # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
+    # Default is empty.
+    download_strategy: CurlDownloadStrategy
+
+    # Git author used to commit to the repository.
+    # Defaults are shown.
+    commit_author:
+      name: guance-bot
+      email: dev-bot@guance.com
+
+    # The project name and current git tag are used in the format string.
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+
+    # Folder inside the repository to put the formula.
+    # Default is the root folder.
+    folder: Formula
+
+    # Your app's homepage.
+    # Default is empty.
+    homepage: "https://guance.io/"
+
+    # Template of your app's description.
+    # Default is empty.
+    description: "Software to create fast and easy drum rolls."
+
+    # SPDX identifier of your app's license.
+    # Default is empty.
+    license: "MIT"
+
+    # So you can `brew test` your formula.
+    # Default is empty.
+    test: |
+      system "#{bin}/iacker version"
+      # ...
+
+    # Custom install script for brew.
+    # Default is 'bin.install "the binary name"'.
+    install: |
+      bin.install "iacker"
+      # ...
