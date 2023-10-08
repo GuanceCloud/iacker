@@ -173,14 +173,14 @@ nfpms:
   - archlinux
   file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
-publishers:
-  - name: fury.io
-    # by specifying `packages` id here goreleaser will only use this publisher
-    # with artifacts identified by this id
-    ids:
-      - guance
-    dir: "{{ dir .ArtifactPath }}"
-    cmd: curl -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/guancecloud/
+# publishers:
+#   - name: fury.io
+#     # by specifying `packages` id here goreleaser will only use this publisher
+#     # with artifacts identified by this id
+#     ids:
+#       - guance
+#     dir: "{{ dir .ArtifactPath }}"
+#     cmd: curl -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/guancecloud/
 
 # brews:
 #   -
