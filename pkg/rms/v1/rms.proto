@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package pkg.rms.v1;
+
+import "pkg/resource/v1/resource.proto";
+// import "pkg/template/v1/template.proto";
+
+option go_package = "github.com/GuanceCloud/iacker/pkg/rms/v1;v1";
+
+message Manifest {
+  optional Options options = 1;
+  map<string, pkg.resource.v1.Resource> resources = 2;
+  map<string, pkg.resource.v1.Error> errors = 3;
+  // map<string, pkg.template.v1.Manifest> templates = 4;
+}
+
+message Options {
+  repeated TemplateOptions templates = 1;
+}
+
+// TemplateOptions is a set of options for a template.
+message TemplateOptions {
+  string template = 1;
+  string outdir = 2;
+  map<string, string> vars = 3;
+}

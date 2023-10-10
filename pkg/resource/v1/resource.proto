@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package pkg.resource.v1;
+
+option go_package = "github.com/GuanceCloud/iacker/pkg/resource/v1;v1";
+
+message Resource {
+  string plural = 1;
+  I18n title = 2;
+  I18n description = 3;
+  map<string, Model> models = 4;
+  Meta meta = 5;
+  Identifier identifier = 6;
+  repeated string errors = 7;
+}
+
+message Identifier {
+  repeated string primary = 1;
+}
+
+message Meta {
+  bool datasource = 1;
+}
+
+message Model {
+  I18n title = 1;
+  I18n description = 2;
+  repeated Property properties = 3;
+}
+
+message Property {
+  string name = 1;
+  I18n title = 2;
+  I18n description = 3;
+  PropSchema schema = 4;
+  PropMeta meta = 5;
+}
+
+message I18n {
+  string zh = 1;
+  string en = 2;
+}
+
+message PropSchema {
+  string type = 1;
+  optional string format = 2;
+  optional bool required = 3;
+  optional ElemSchema elem = 4;
+  repeated Enum enum = 5;
+  optional string model = 6;
+  optional string ref = 7;
+}
+
+message ElemSchema {
+  string type = 1;
+  optional string format = 2;
+  optional string model = 3;
+  optional string ref = 4;
+  repeated Enum enum = 5;
+}
+
+message PropMeta {
+  optional bool dynamic = 1;
+  optional bool immutable = 2;
+}
+
+message Enum {
+  string name = 1;
+  string value = 2;
+  I18n title = 3;
+}
+
+message Error {
+  I18n title = 1;
+  ErrorMeta meta = 2;
+}
+
+message ErrorMeta {
+  int64 code = 1;
+}

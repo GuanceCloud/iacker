@@ -1,0 +1,11 @@
+version: v1
+name: buf.build/GuanceCloud/iacker
+deps:
+- buf.build/googleapis/googleapis
+- buf.build/kratos/apis
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
