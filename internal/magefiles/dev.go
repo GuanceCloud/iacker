@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/GuanceCloud/iacker/internal/helpers/osfs"
+	"github.com/hashicorp/go-multierror"
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 )
@@ -56,6 +57,25 @@ func (dev Dev) Install() error {
 	return sh.Run(
 		"go", "build", "-o",
 		filepath.Join(gopath, "bin", binaryName),
-		filepath.Join("cmd", binaryName),
+		fmt.Sprintf("./cmd/%s", binaryName),
 	)
+}
+
+// GenCue generate cue from proto files
+func (dev Dev) GenCue() error {
+	pkgs := []string{
+		"rms",
+		"resource",
+		"template",
+	}
+	var mErr error
+	for _, pkg := range pkgs {
+		if err := sh.Run(
+			"cue", "import", "-f", "-I", ".",
+			fmt.Sprintf("./pkg/%s/v1/%s.proto", pkg, pkg),
+		); err != nil {
+			mErr = multierror.Append(mErr, err)
+		}
+	}
+	return mErr
 }

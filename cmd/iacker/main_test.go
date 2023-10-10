@@ -3,11 +3,13 @@ package main
 import (
 	"bytes"
 	"testing"
+
+	"github.com/GuanceCloud/iacker/internal/cmd"
 )
 
 func TestMain(t *testing.T) {
 	var buf bytes.Buffer
-	rootCmd := NewRootCmd()
+	rootCmd := cmd.NewRootCmd()
 	rootCmd.SetOutput(&buf)
 	rootCmd.SetArgs([]string{"--help"})
 	if err := rootCmd.Execute(); err != nil {
