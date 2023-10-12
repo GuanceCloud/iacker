@@ -8,9 +8,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// GenerateOptions is the options of generate command
+type GenerateOptions struct {
+	Init bool
+}
+
 // NewGenerateCmd returns a new generate command.
 func NewGenerateCmd() *cobra.Command {
-	generateCmd := &cobra.Command{
+	options := &GenerateOptions{}
+	cmd := &cobra.Command{
 		Use:     "generate",
 		Aliases: []string{"gen"},
 		Short:   "Generate code from CUE",
@@ -26,12 +32,16 @@ func NewGenerateCmd() *cobra.Command {
 				if err != nil {
 					return err
 				}
-				if err := cue.Generate(rms); err != nil {
+				if err := cue.Generate(
+					rms,
+					cue.WithLayout(options.Init),
+				); err != nil {
 					mErr = multierror.Append(mErr, fmt.Errorf("generate %s error: %w", root, err))
 				}
 			}
 			return mErr
 		},
 	}
-	return generateCmd
+	cmd.Flags().BoolVar(&options.Init, "init", false, "initialize project with the layout")
+	return cmd
 }

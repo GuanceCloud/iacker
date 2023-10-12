@@ -151,6 +151,35 @@ func (m *Manifest) validate(all bool) error {
 
 	}
 
+	if all {
+		switch v := interface{}(m.GetLayouts()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ManifestValidationError{
+					field:  "Layouts",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ManifestValidationError{
+					field:  "Layouts",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetLayouts()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ManifestValidationError{
+				field:  "Layouts",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return ManifestMultiError(errors)
 	}
@@ -563,6 +592,150 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = OutputsValidationError{}
+
+// Validate checks the field values on Layouts with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Layouts) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Layouts with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in LayoutsMultiError, or nil if none found.
+func (m *Layouts) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Layouts) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	{
+		sorted_keys := make([]string, len(m.GetFiles()))
+		i := 0
+		for key := range m.GetFiles() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetFiles()[key]
+			_ = val
+
+			// no validation rules for Files[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, LayoutsValidationError{
+							field:  fmt.Sprintf("Files[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, LayoutsValidationError{
+							field:  fmt.Sprintf("Files[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return LayoutsValidationError{
+						field:  fmt.Sprintf("Files[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		}
+	}
+
+	if len(errors) > 0 {
+		return LayoutsMultiError(errors)
+	}
+
+	return nil
+}
+
+// LayoutsMultiError is an error wrapping multiple validation errors returned
+// by Layouts.ValidateAll() if the designated constraints aren't met.
+type LayoutsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LayoutsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LayoutsMultiError) AllErrors() []error { return m }
+
+// LayoutsValidationError is the validation error returned by Layouts.Validate
+// if the designated constraints aren't met.
+type LayoutsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LayoutsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LayoutsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LayoutsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LayoutsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LayoutsValidationError) ErrorName() string { return "LayoutsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LayoutsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLayouts.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LayoutsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LayoutsValidationError{}
 
 // Validate checks the field values on Diagnostic with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

@@ -12,6 +12,7 @@ message Manifest {
   Inputs inputs = 2;
   Outputs outputs = 3;
   repeated Diagnostic diagnostics = 4;
+  Layouts layouts = 5;
 }
 
 // Inputs is a set of inputs for a template.
@@ -23,6 +24,11 @@ message Inputs {
 
 // Outputs is a set of outputs for a template.
 message Outputs {
+  map<string, File> files = 1;
+}
+
+// Layouts is a set of layouts for a template.
+message Layouts {
   map<string, File> files = 1;
 }
 

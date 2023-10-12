@@ -50,6 +50,10 @@ templates: "foo": {
 	outputs: files: "README.md": {
 		content: "Hello, World!"
 	}
+
+	layouts: files: "Init.md": {
+		content: "This file is only generated when --init is specified!"
+	}
 }
 
 // Template options
