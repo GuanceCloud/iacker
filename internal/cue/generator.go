@@ -51,20 +51,16 @@ func GeneratePlan(p *Package, options ...GenerateOption) (*Plan, error) {
 
 		color.Magenta("Generate template %q to folder %q", templateName, templateOptions.Outdir)
 
-		// Get the template
-		templateValue := p.value.LookupPath(cue.MakePath(cue.Str("templates"), cue.Str(templateName)))
-		if err := templateValue.Err(); err != nil {
-			return nil, fmt.Errorf("lookup path failed: %w", err)
-		}
-
 		// Fill the template with the input RMS data
-		concretTemplateValue := templateValue.FillPath(cue.MakePath(cue.Str("inputs")), &templateV1.Inputs{
-			Resources: rms.Resources,
-			Errors:    rms.Errors,
-			Vars:      templateOptions.Vars,
-		})
+		concretTemplateValue := p.value.
+			LookupPath(cue.MakePath(cue.Str("templates"), cue.Str(templateName))).
+			FillPath(cue.MakePath(cue.Str("inputs")), &templateV1.Inputs{
+				Resources: rms.Resources,
+				Errors:    rms.Errors,
+				Vars:      templateOptions.Vars,
+			})
 		if err := concretTemplateValue.Err(); err != nil {
-			return nil, fmt.Errorf("fill path failed: %w", err)
+			return nil, fmt.Errorf("fill inputs failed: %w", err)
 		}
 
 		// Check the template diagnostics

@@ -40,12 +40,8 @@ resources: "Pet": models: "Pet": {
 }
 
 // Template definition
-templates: "foo": {
+templates: "foo": template.#Manifest & {
 	name: "basic"
-
-	inputs: template.#Inputs
-
-	diagnostics: [...template.#Diagnostic]
 
 	outputs: files: "README.md": {
 		content: "Hello, World!"
