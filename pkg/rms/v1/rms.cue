@@ -1,9 +1,7 @@
+// import "pkg/template/v1/template.proto";
 package v1
 
-import (
-	"github.com/GuanceCloud/iacker/pkg/resource/v1"
-	v1_1 "github.com/GuanceCloud/iacker/pkg/template/v1"
-)
+import "github.com/GuanceCloud/iacker/pkg/resource/v1"
 
 #Manifest: {
 	options?: #Options @protobuf(1,Options)
@@ -13,9 +11,8 @@ import (
 	errors?: {
 		[string]: v1.#Error
 	} @protobuf(3,map[string]pkg.resource.v1.Error)
-	templates?: {
-		[string]: v1_1.#Manifest
-	} @protobuf(4,map[string]pkg.template.v1.Manifest)
+	// map<string, pkg.template.v1.Manifest> templates = 4;
+
 }
 
 #Options: {

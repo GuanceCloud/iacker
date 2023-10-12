@@ -8,6 +8,7 @@ import "github.com/GuanceCloud/iacker/pkg/resource/v1"
 	inputs?:  #Inputs  @protobuf(2,Inputs)
 	outputs?: #Outputs @protobuf(3,Outputs)
 	diagnostics?: [...#Diagnostic] @protobuf(4,Diagnostic)
+	layouts?: #Layouts @protobuf(5,Layouts)
 }
 
 // Inputs is a set of inputs for a template.
@@ -25,6 +26,13 @@ import "github.com/GuanceCloud/iacker/pkg/resource/v1"
 
 // Outputs is a set of outputs for a template.
 #Outputs: {
+	files?: {
+		[string]: #File
+	} @protobuf(1,map[string]File)
+}
+
+// Layouts is a set of layouts for a template.
+#Layouts: {
 	files?: {
 		[string]: #File
 	} @protobuf(1,map[string]File)

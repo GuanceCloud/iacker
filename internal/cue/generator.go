@@ -13,10 +13,20 @@ import (
 	templateV1 "github.com/GuanceCloud/iacker/pkg/template/v1"
 )
 
-type generator struct{}
+type generator struct {
+	layout bool
+}
 
 // GenerateOption is a function that configures a generator.
 type GenerateOption func(*generator) error
+
+// WithLayout will set the layout option
+func WithLayout(layout bool) GenerateOption {
+	return func(g *generator) error {
+		g.layout = layout
+		return nil
+	}
+}
 
 // Generate will generate code files into the output folder
 func Generate(p *Package, options ...GenerateOption) error {
@@ -85,13 +95,22 @@ func GeneratePlan(p *Package, options ...GenerateOption) (*Plan, error) {
 			sourceFiles[filepath.Join(templateOptions.Outdir, fileName)] = file
 		}
 
-		for fileName, file := range concretTemplate.Outputs.Files {
-			targetFiles[filepath.Join(templateOptions.Outdir, fileName)] = file.Content
+		// Create the generated files
+		if concretTemplate.Outputs != nil {
+			for fileName, file := range concretTemplate.Outputs.Files {
+				targetFiles[filepath.Join(templateOptions.Outdir, fileName)] = file.Content
+			}
+		}
+
+		// Create the layout files
+		if g.layout && concretTemplate.Layouts != nil {
+			for fileName, file := range concretTemplate.Layouts.Files {
+				targetFiles[filepath.Join(templateOptions.Outdir, fileName)] = file.Content
+			}
 		}
 	}
 	if mErr != nil {
 		return nil, mErr
 	}
-
 	return &Plan{sources: sourceFiles, targets: targetFiles}, nil
 }
