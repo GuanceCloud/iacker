@@ -1,0 +1,14 @@
+# This file is described at GitHub documentation
+# See also: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Documentation Mantainer
+docs/* @yufeiminds
+
+# Proposal Reviewer 
+proposals/* @yufeiminds
+
+# Configuration Mantainer
+*.cue @yufeiminds
+
+# Fall back to default owner
+* @yufeiminds
