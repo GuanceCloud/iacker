@@ -120,13 +120,13 @@ import (
 	_resource: gotemplate.Execute(_resource_template, {
 		"name": naming.#UpperCamel & {"name": name}
 		"pkg":  pkg
-		v:      rs
+		"v":      rs
 		properties: [
 			for i, pinfo in rs.models[name].properties {
 				gotemplate.Execute(_prop_template, {
-					name:  naming.#Snake & {"name": pinfo.name}
-					v:     pinfo
-					index: i + 1
+					"name":  naming.#Snake & {"name": pinfo.name}
+					"v":     pinfo
+					"index": i + 1
 				})
 			},
 		]
@@ -135,29 +135,29 @@ import (
 	_data_source: gotemplate.Execute(_data_source_template, {
 		"name": naming.#UpperCamel & {"name": name}
 		"pkg":  pkg
-		v:      rs
+		"v":      rs
 		properties: [
 			for i, pinfo in rs.models[name].properties {
 				gotemplate.Execute(_prop_template, {
-					name:  naming.#Snake & {"name": pinfo.name}
-					v:     pinfo
-					index: i + 1
+					"name":  naming.#Snake & {"name": pinfo.name}
+					"v":     pinfo
+					"index": i + 1
 				})
 			},
 		]
 	})
 
 	_models: [
-		for mname, minfo in rs.models if mname != name {
+		for mname, minfo in (rs.models | *{}) if mname != name {
 			gotemplate.Execute(_model_template, {
-				name: naming.#UpperCamel & {"name": mname}
-				v:    minfo
+				"name": naming.#UpperCamel & {"name": mname}
+				"v":    minfo
 				properties: [
 					for i, pinfo in minfo.properties {
 						gotemplate.Execute(_prop_template, {
-							name:  naming.#Snake & {"name": pinfo.name}
-							v:     pinfo
-							index: i + 1
+							"name":  naming.#Snake & {"name": pinfo.name}
+							"v":     pinfo
+							"index": i + 1
 						})
 					},
 				]

@@ -1,4 +1,4 @@
-package terraform
+package v1
 
 import (
 	gotemplate "text/template"
