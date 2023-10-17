@@ -37,7 +37,7 @@ outputs: files: "\(provider)/resources.go": template.#File & {
 		for rsname, rsinfo in inputs.resources {
 			if !(*rsinfo.meta.datasource | false) {
 				(rsname): naming.#UpperCamel & {
-					name: rsname
+					"name": rsname
 				}
 			}
 		}

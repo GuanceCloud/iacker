@@ -2,7 +2,7 @@ package tests
 
 import (
 	"github.com/GuanceCloud/iacker/examples/petstore"
-	"github.com/GuanceCloud/iacker/templates/terraform"
+	"github.com/GuanceCloud/iacker/templates/terraform/v1"
 )
 
 resources: petstore.resources

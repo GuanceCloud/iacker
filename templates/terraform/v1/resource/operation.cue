@@ -178,7 +178,7 @@ for rsname, rsinfo in inputs.resources {
 	if !(*rsinfo.meta.datasource | false) {
 		outputs: files: "internal/resources/\(strings.ToLower(rsname))/resource.go": template.#File & {
 			content: gotemplate.Execute(_resource_operation_template, {
-				name: naming.#UpperCamel & {"name": rsname}
+				"name": naming.#UpperCamel & {"name": rsname}
 			})
 		}
 	}

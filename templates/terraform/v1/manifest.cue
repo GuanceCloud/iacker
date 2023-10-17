@@ -1,9 +1,9 @@
-package terraform
+package v1
 
 import (
 	template "github.com/GuanceCloud/iacker/pkg/template/v1"
-	resource "github.com/GuanceCloud/iacker/templates/terraform/resource"
-	datasource "github.com/GuanceCloud/iacker/templates/terraform/datasource"
+	resource "github.com/GuanceCloud/iacker/templates/terraform/v1/resource"
+	datasource "github.com/GuanceCloud/iacker/templates/terraform/v1/datasource"
 )
 
 name: "terraform"
