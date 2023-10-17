@@ -148,7 +148,7 @@ import (
 	})
 
 	_models: [
-		for mname, minfo in (rs.models | *{}) if mname != name {
+		for mname, minfo in (*rs.models | {}) if mname != name {
 			gotemplate.Execute(_model_template, {
 				"name": naming.#UpperCamel & {"name": mname}
 				"v":    minfo
