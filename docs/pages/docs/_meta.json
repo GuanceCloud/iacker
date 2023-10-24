@@ -1,0 +1,54 @@
+{
+    "index": {
+        "title": "Home",
+        "display": "hidden"
+    },
+    "-- Tutorials": {
+        "type": "separator",
+        "title": "Tutorials"
+    },
+    "tutorials": {
+        "title": "Tutorials",
+        "type": "page"
+    },
+    "-- How-To Guides": {
+        "type": "separator",
+        "title": "How-To Guides",
+        "display": "hidden"
+    },
+    "how-to-guides": {
+        "title": "How-To Guides",
+        "type": "page"
+    },
+    "-- Explanations": {
+        "type": "separator",
+        "title": "Explanations",
+        "display": "hidden"
+    }, 
+    "explanations": {
+        "title": "Explanations",
+        "type": "page"
+    },
+    "-- References": {
+        "type": "separator",
+        "title": "References",
+        "display": "hidden"
+    },
+    "references": {
+        "title": "References",
+        "type": "page"
+    },
+    "-- More": {
+        "type": "separator",
+        "title": "More"
+    },
+    "about-link": {
+        "title": "About Iacker",
+        "href": "/about"
+    },
+    "guance-link": {
+        "title": "Guance Community ↗",
+        "href": "https://guance.io",
+        "newWindow": true
+    }
+}
