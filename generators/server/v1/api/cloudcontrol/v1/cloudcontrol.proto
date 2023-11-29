@@ -1,0 +1,325 @@
+syntax = "proto3";
+
+package api.cloudcontrol.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/GuanceCloud/iacker/templates/server/v1/api/cloudcontrol/v1;v1";
+
+// The cloud control service definition.
+// Cloud Control API is inspired by AWS Cloud Control Pattern.
+// See details: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/Welcome.html
+service CloudControlService {
+  // Creates a new resource.
+  rpc CreateResource(CreateResourceRequest) returns (CreateResourceResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/create-resource"
+      body: "*"
+    };
+  }
+
+  // Gets the resource by name.
+  rpc GetResource(GetResourceRequest) returns (GetResourceResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/get-resource"
+      body: "*"
+    };
+  }
+
+  // Deletes the resource by name.
+  rpc DeleteResource(DeleteResourceRequest) returns (DeleteResourceResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/delete-resource"
+      body: "*"
+    };
+  }
+
+  // Lists all resources.
+  rpc ListResources(ListResourcesRequest) returns (ListResourcesResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/list-resources"
+      body: "*"
+    };
+  }
+
+  // Updates the resource.
+  rpc UpdateResource(UpdateResourceRequest) returns (UpdateResourceResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/update-resource"
+      body: "*"
+    };
+  }
+
+  // Cancels the specified resource request.
+  rpc CancelResourceRequest(CancelResourceRequestRequest) returns (CancelResourceRequestResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/cancel-resource-request"
+      body: "*"
+    };
+  }
+
+  // Gets the specified resource request status.
+  rpc GetResourceRequestStatus(GetResourceRequestStatusRequest) returns (GetResourceRequestStatusResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/get-resource-request-status"
+      body: "*"
+    };
+  }
+
+  // List resource requests.
+  rpc ListResourceRequests(ListResourceRequestsRequest) returns (ListResourceRequestsResponse) {
+    option (google.api.http) = {
+      post: "/cloud-control/list-resource-requests"
+      body: "*"
+    };
+  }
+}
+
+// The request message of resource creating.
+message CreateResourceRequest {
+  // The region of the resource.
+  string region = 1;
+
+  // The name of the resource type.
+  string type_name = 2;
+
+  /* The state of resource. JSON format */
+  string desired_state = 3;
+
+  // The access token of request
+  string access_token = 4;
+}
+
+// The response message of resource creating.
+message CreateResourceResponse {
+  // Represents the current status of the resource creating request.
+  ProgressEvent progress_event = 1;
+}
+
+// The request message of resource getting.
+message GetResourceRequest {
+  // The identifier for the resource.
+  string identifier = 1;
+
+  // The access token of request
+  string access_token = 2;
+}
+
+// The response message of resource getting.
+message GetResourceResponse {
+  // Represents information about a provisioned resource.
+  ResourceDescription resource_description = 1;
+
+  // The name of the resource type.
+  string type_name = 2;
+}
+
+// The request message of resource deleting.
+message DeleteResourceRequest {
+  // The identifier for the resource.
+  string identifier = 1;
+
+  // The access token of request
+  string access_token = 2;
+}
+
+// The response message of resource deleting.
+message DeleteResourceResponse {
+  // Represents the current status of the resource deletion request.
+  ProgressEvent progress_event = 1;
+}
+
+// The request message of resource listing.
+message ListResourcesRequest {
+  // Count of reserved records.
+  int64 max_results = 1;
+
+  // The region of the resource.
+  string region = 2;
+
+  // The name of the resource type.
+  string type_name = 3;
+
+  // The access token of request
+  string access_token = 4;
+}
+
+// The response message of resource listing.
+message ListResourcesResponse {
+  // The next token for pagination.
+  // If no remaining results. The next token will be null.
+  string next_token = 1;
+
+  // A list of resource descriptions.
+  repeated ResourceDescription resource_descriptions = 2;
+
+  // The name of the resource type.
+  string type_name = 3;
+}
+
+// The request message of resource updating.
+message UpdateResourceRequest {
+  // The identifier for the resource.
+  string identifier = 1;
+
+  // A JavaScript Object Notation (JSON) document listing the patch operations that represent the updates to apply to the current resource properties.
+  string patch_document = 2;
+
+  // The access token of request
+  string access_token = 3;
+}
+
+// The response message of resource updating.
+message UpdateResourceResponse {
+  // Represents the current status of the resource update request.
+  ProgressEvent progress_event = 1;
+}
+
+// The request message of resource request canceling.
+message CancelResourceRequestRequest {
+  // The RequestToken of the ProgressEvent object returned by the resource operation request.
+  string request_token = 1;
+}
+
+// The response message of resource request canceling.
+message CancelResourceRequestResponse {
+  // Represents the current status of the resource update request.
+  ProgressEvent progress_event = 1;
+}
+
+// The request message of resource request status getting.
+message GetResourceRequestStatusRequest {
+  // The RequestToken of the ProgressEvent object returned by the resource operation request.
+  string request_token = 1;
+}
+
+// The response message of resource request status getting.
+message GetResourceRequestStatusResponse {
+  // Represents the current status of the resource update request.
+  ProgressEvent progress_event = 1;
+}
+
+// The request message of resource requests listing.
+message ListResourceRequestsRequest {
+  // Count of reserved records.
+  int64 max_results = 1;
+
+  // The next token for pagination.
+  string next_token = 2;
+
+  // The filter criteria to apply to the requests returned.
+  ResourceRequestStatusFilter resource_request_status_filter = 3;
+}
+
+// The response message of resource requests listing.
+message ListResourceRequestsResponse {
+  // The next token for pagination.
+  // If no remaining results. The next token will be null.
+  string next_token = 1;
+
+  // A list of resource requests.
+  repeated ProgressEvent resource_request_status_summaries = 2;
+}
+
+// The current status of a resource operation request.
+message ProgressEvent {
+  /* For requests with a status of FAILED, the associated error code.
+     
+     Valid Values:
+       NotUpdatable
+       | InvalidRequest
+       | AccessDenied
+       | InvalidCredentials
+       | AlreadyExists
+       | NotFound
+       | ResourceConflict
+       | Throttling
+       | ServiceLimitExceeded
+       | NotStabilized
+       | GeneralServiceException
+       | ServiceInternalError
+       | ServiceTimeout
+       | NetworkFailure
+       | InternalFailure
+  */
+  string error_code = 1;
+
+  // When the resource operation request was initiated.
+  int64 event_time = 2;
+
+  // The primary identifier for the resource.
+  string identifier = 3;
+
+  /* The resource operation type.
+     
+     Valid Values:
+       CREATE
+       | DELETE
+       | UPDATE
+  */
+  string operation = 4;
+
+  /* The current status of the resource operation request.
+     
+     * PENDING: The resource operation hasn't yet started.
+     * IN_PROGRESS: The resource operation is currently in progress.
+     * SUCCESS: The resource operation has successfully completed.
+     * FAILED: The resource operation has failed. Refer to the error code and status message for more information.
+     * CANCEL_IN_PROGRESS: The resource operation is in the process of being canceled.
+     * CANCEL_COMPLETE: The resource operation has been canceled.
+  */
+  string operation_status = 5;
+
+  // The unique token representing this resource operation request.
+  // Use the RequestToken with GetResourceRequestStatus to return the current status of a resource operation request.
+  string request_token = 6;
+
+  // The resource state. JSON format.
+  string resource_model = 7;
+
+  // When to next request the status of this resource operation request.
+  int64 retry_after = 8;
+
+  // Any message explaining the current status.
+  string status_message = 9;
+
+  // The name of the resource type used in the operation.
+  string type_name = 10;
+}
+
+// Information about the specified resources, including primary identifier and resource model.
+message ResourceDescription {
+  // The identifier for the resource.
+  string identifier = 1;
+
+  // The resource state.
+  // It is a JSON blob.
+  string properties = 2;
+
+  // The time when the resource was created.
+  string created_at = 3;
+}
+
+// The filter criteria to use in determining the requests returned.
+message ResourceRequestStatusFilter {
+  /* The operation types to include in the filter.
+     
+     Valid Values:
+       CREATE
+       | DELETE
+       | UPDATE
+  */
+  repeated string operations = 1;
+
+  /* The resource operation request status types to include in the filter.
+     
+     Valid Values:
+       PENDING
+       | IN_PROGRESS
+       | SUCCESS
+       | FAILED
+       | CANCEL_IN_PROGRESS
+       | CANCEL_COMPLETE
+  */
+  repeated string operation_statuses = 2;
+}

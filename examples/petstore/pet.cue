@@ -11,7 +11,6 @@ resources: "Pet": {
 		zh: "宠物很可爱，包括猫猫狗狗等"
 		en: "Pets are cute, including cats, dogs, etc."
 	}
-	model: "Pet"
 }
 
 // Pet model
