@@ -1,1 +1,68 @@
 # Quickstart
+
+## Introduction
+
+Iacker is a project that help developers to create their own declarative provider. Like `Terraform`, `Pulumi` and etc.
+
+The goal of Iacker is implementing the open features for service providers.
+
+* **Open API**: Expose [Cloud Control](https://aws.amazon.com/cloudcontrolapi/) and [GraphQL](https://graphql.org/) API to the developer.
+* **Open Provider**: Auto-generate provider code for [Terraform](https://www.terraform.io), [Pulumi](https://www.pulumi.com), [CDK](https://developer.hashicorp.com/terraform/cdktf), [KubeVela](https://kubevela.io), [Crossplane,](https://www.crossplane.io) etc.
+* **Open Integration**: Create libraries for [Cobra](https://github.com/spf13/cobra), [Apollo,](https://www.apollographql.com) and software development kits for various languages.
+
+## Create your first provider
+
+Run Examples on KillerCoda
+
+### Declare `Pet` resource
+
+```cue
+package petstore
+
+// Pet is the pet resource definition
+resources: "Pet": {
+	plural: "pets"
+	title: {
+		zh: "宠物"
+		en: "Pet"
+	}
+	description: {
+		zh: "宠物很可爱，包括猫猫狗狗等"
+		en: "Pets are cute, including cats, dogs, etc."
+	}
+}
+
+// Pet model
+resources: "Pet": models: "Pet": {
+	title: {
+		zh: "宠物"
+		en: "Pet"
+	}
+	properties: [
+		{
+			name: "name"
+			title: {
+				zh: "名称"
+				en: "Name"
+			}
+			schema: {
+				type:     "string"
+				required: true
+			}
+		},
+	]
+}
+```
+
+### Declare Geneartors
+
+```cue
+package petstore
+
+```
+
+### Generate provider code
+
+```bash
+iacker generate
+```

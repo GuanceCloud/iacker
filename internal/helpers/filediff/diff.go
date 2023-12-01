@@ -17,10 +17,7 @@ func FileDiff(sources Files, targets Files) (*Result, error) {
 		}
 
 		if stringutils.RemoveWhitespace(otherFile) != stringutils.RemoveWhitespace(snapshotFile) {
-			result.Diffs[path] = Diff{
-				New: otherFile,
-				Old: snapshotFile,
-			}
+			result.Diffs[path] = Diff{New: otherFile, Old: snapshotFile}
 		} else {
 			result.Unchanged = append(result.Unchanged, path)
 		}

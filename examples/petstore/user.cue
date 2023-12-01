@@ -11,7 +11,6 @@ resources: "User": {
 		zh: "用户信息"
 		en: "User info"
 	}
-	model: "User"
 }
 
 resources: "User": models: "User": {

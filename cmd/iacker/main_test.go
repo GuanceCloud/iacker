@@ -7,7 +7,7 @@ import (
 	"github.com/GuanceCloud/iacker/internal/cmd"
 )
 
-func TestMain(t *testing.T) {
+func TestMainExecution(t *testing.T) {
 	var buf bytes.Buffer
 	rootCmd := cmd.NewRootCmd()
 	rootCmd.SetOutput(&buf)

@@ -62,20 +62,20 @@ func GeneratePlan(p *Package, options ...GenerateOption) (*Plan, error) {
 		color.Magenta("Generate template %q to folder %q", templateName, templateOptions.Outdir)
 
 		// Fill the template with the input RMS data
-		concretTemplateValue := p.value.
+		concreteTemplateValue := p.value.
 			LookupPath(cue.MakePath(cue.Str("templates"), cue.Str(templateName))).
 			FillPath(cue.MakePath(cue.Str("inputs")), &templateV1.Inputs{
 				Resources: rms.Resources,
 				Errors:    rms.Errors,
 				Vars:      templateOptions.Vars,
 			})
-		if err := concretTemplateValue.Err(); err != nil {
+		if err := concreteTemplateValue.Err(); err != nil {
 			return nil, fmt.Errorf("fill inputs failed: %w", err)
 		}
 
 		// Check the template diagnostics
 		var concretTemplate templateV1.Manifest
-		if err := concretTemplateValue.Decode(&concretTemplate); err != nil {
+		if err := concreteTemplateValue.Decode(&concretTemplate); err != nil {
 			return nil, fmt.Errorf("decode template %s(%d): %w", templateName, i, err)
 		}
 		for _, diag := range concretTemplate.Diagnostics {
