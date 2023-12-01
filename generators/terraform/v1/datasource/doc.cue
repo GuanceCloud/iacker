@@ -1,7 +1,7 @@
 package datasource
 
 import (
-    naming "github.com/GuanceCloud/iacker/pkg/helpers/naming"
+	naming "github.com/GuanceCloud/iacker/pkg/helpers/naming"
 	template "github.com/GuanceCloud/iacker/pkg/template/v1"
 )
 

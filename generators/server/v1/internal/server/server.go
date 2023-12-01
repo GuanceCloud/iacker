@@ -1,16 +1,16 @@
 package server
 
 import (
-	"github.com/go-kratos/kratos/v2"
 	"os"
+
+	"github.com/go-kratos/kratos/v2"
+	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 
 	"github.com/GuanceCloud/iacker/generators/server/v1/internal/biz"
 	"github.com/GuanceCloud/iacker/generators/server/v1/internal/service"
 	ib "github.com/GuanceCloud/iacker/generators/server/v1/pkg/backend"
 	"github.com/GuanceCloud/iacker/generators/server/v1/pkg/config/v1"
-
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
 )
 
 type Server interface {

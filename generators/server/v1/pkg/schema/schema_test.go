@@ -3,7 +3,7 @@ package schema
 import (
 	"testing"
 
-	types2 "github.com/GuanceCloud/iacker/generators/server/v1/pkg/types"
+	"github.com/GuanceCloud/iacker/generators/server/v1/pkg/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,14 +14,10 @@ func TestSchema(t *testing.T) {
 		Schema   string
 		Resource string
 	}
-	type testWant struct {
-		Id   types2.Identifier
-		Refs []types2.Identifier
-	}
 	tests := []struct {
 		name    string
 		input   testInput
-		want    testWant
+		want    []string
 		wantErr bool
 	}{
 		{
@@ -31,29 +27,19 @@ func TestSchema(t *testing.T) {
 				Schema:   testSchemaJson,
 				Resource: testResourceJson,
 			},
-			want: testWant{
-				Id: types2.Identifier{
-					ResourceType: "Test",
-				},
-				Refs: []types2.Identifier{
-					{
-						ResourceType: "Resource",
-					},
-					{
-						ResourceType: "User",
-					},
-				},
+			want: []string{
+				"grn:1:2:3:4:5:6",
+				"grn:1:2:3:4:5:42",
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s, err := NewFromBytes(tt.input.TypeName, []byte(tt.input.Schema))
+			s, err := Compile(tt.input.Schema, tt.input.TypeName)
 			if !assert.NoError(t, err) {
 				return
 			}
-
-			r := &types2.Resource{
+			r := &types.Resource{
 				State: tt.input.Resource,
 			}
 
@@ -62,8 +48,11 @@ func TestSchema(t *testing.T) {
 			if !assert.NoError(t, err) {
 				return
 			}
-			for _, refId := range tt.want.Refs {
-				assert.True(t, refs.Exists(&refId))
+			for _, refId := range tt.want {
+				id, err := types.ParseIdentifier(refId)
+				if assert.NoError(t, err) {
+					assert.True(t, refs.Exists(&id))
+				}
 			}
 		})
 	}
@@ -117,8 +106,8 @@ const testSchemaJson = `{
 
 const testResourceJson = `{
 	"id": "test-id",
-	"ref": "resource-id",
+	"ref": "grn:1:2:3:4:5:6",
 	"user": {
-		"id": "user-id"
+		"id": "grn:1:2:3:4:5:42"
 	}
 }`

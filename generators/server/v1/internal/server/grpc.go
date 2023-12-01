@@ -1,8 +1,9 @@
 package server
 
 import (
-	v12 "github.com/GuanceCloud/iacker/generators/server/v1/pkg/config/v1"
 	"time"
+
+	v12 "github.com/GuanceCloud/iacker/generators/server/v1/pkg/config/v1"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -14,7 +15,7 @@ import (
 
 // NewGRPCServer new a gRPC server.
 func NewGRPCServer(c *v12.Server, svc *service.CloudControlService, logger log.Logger) *grpc.Server {
-	var opts = []grpc.ServerOption{
+	opts := []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
 		),

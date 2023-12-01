@@ -1,7 +1,7 @@
 package resource
 
 import (
-    "strings"
+	"strings"
 
 	template "github.com/GuanceCloud/iacker/pkg/template/v1"
 	builder "github.com/GuanceCloud/iacker/templates/terraform/v1/builder"

@@ -10,8 +10,8 @@ name: "terraform"
 
 inputs: template.#Inputs
 
-_rs: resource & { "inputs": inputs }
-_ds: datasource & { "inputs": inputs } 
+_rs: resource & {"inputs":   inputs}
+_ds: datasource & {"inputs": inputs}
 
 outputs: files: _rs.outputs.files & _ds.outputs.files
 

@@ -14,8 +14,7 @@ type Middleware interface {
 }
 
 // BaseMiddleware is the base struct for middleware developing
-type BaseMiddleware struct {
-}
+type BaseMiddleware struct{}
 
 // Prepare is the method to implement the prepare logic
 func (b BaseMiddleware) Prepare(ctx context.Context) (context.Context, error) {

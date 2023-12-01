@@ -13,11 +13,11 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
-// Dev generate code from RMS definitions
-type Dev mg.Namespace
+// Run executes the commands
+type Run mg.Namespace
 
 // Fmt format the code
-func (dev Dev) Fmt() error {
+func (dev Run) Fmt() error {
 	commands := []string{
 		"gofumpt -l -w .",
 		"cue fmt ./...",
@@ -26,12 +26,12 @@ func (dev Dev) Fmt() error {
 }
 
 // Lint lint the code
-func (dev Dev) Lint() error {
+func (dev Run) Lint() error {
 	return sh.Run("golangci-lint", "run", "--fix", "--allow-parallel-runners")
 }
 
 // D2 build svg from d2 files
-func (dev Dev) D2() error {
+func (dev Run) D2() error {
 	files, err := osfs.ListFileByExt("proposals", "d2")
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func (dev Dev) D2() error {
 }
 
 // Install install the binary into local environment
-func (dev Dev) Install() error {
+func (dev Run) Install() error {
 	// Get GOPATH
 	gopath, err := sh.Output("go", "env", "GOPATH")
 	if err != nil {
@@ -62,7 +62,7 @@ func (dev Dev) Install() error {
 }
 
 // GenCue generate cue from proto files
-func (dev Dev) GenCue() error {
+func (dev Run) GenCue() error {
 	pkgs := []string{
 		"rms",
 		"resource",

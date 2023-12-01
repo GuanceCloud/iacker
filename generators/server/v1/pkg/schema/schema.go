@@ -72,10 +72,11 @@ func (s *rawSchema) GenRefs(rs *types.Resource) (*References, error) {
 		id, err := types.ParseIdentifier(pointer.Get(rs.State))
 		if err != nil {
 			mErr = multierror.Append(mErr, fmt.Errorf("parse id failed: %w", err))
+			continue
 		}
 		refs.Add(&id)
 	}
-	return refs, nil
+	return refs, mErr
 }
 
 // Validate validates the resource
